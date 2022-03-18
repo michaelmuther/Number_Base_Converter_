@@ -10,9 +10,9 @@ public class Input {
         final String INPUT_TO_STR = "Enter source number: ";
         final String INPUT_TARGET_BASE_STR = "Enter the target base: ";
         final String INPUT_SOURCE_BASE_STR = "Enter source base: ";
-        final String EXIT = "exit";
-        final String FROM = "from";
-        final String TO = "to";
+        final String EXIT = "/exit";
+        final String FROM = "/from";
+        final String TO = "/to";
         int number;
         String numberString;
         int base;
