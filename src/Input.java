@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.Scanner;
 
 public class Input {
@@ -5,35 +6,41 @@ public class Input {
     private static Scanner scanner = new Scanner(System.in);
 
     public Input() {
-        final String INPUT_TO_FROM = "Do you want to convert /from decimal or /to decimal? (To quit type /exit) ";
-        final String INPUT_FROM_STR = "Enter number in decimal system: ";
-        final String INPUT_TO_STR = "Enter source number: ";
-        final String INPUT_TARGET_BASE_STR = "Enter the target base: ";
-        final String INPUT_SOURCE_BASE_STR = "Enter source base: ";
+        final String INPUT_TWO_BASES_STR = "Enter two numbers in format: {source base} {target base} (To quit type /exit) ";
+        final String INPUT_ENTER_STR = "Enter number in base %d to convert to base %d (To go back type /back) ";
         final String EXIT = "/exit";
-        final String FROM = "/from";
-        final String TO = "/to";
-        int number;
-        String numberString;
-        int base;
-        String fromToExit;
+        final String BACK = "/back";
+        final String CONVERSION = "Conversion result: ";
+        BigInteger number;
+//        String numberString;
+//        BigInteger baseFrom;
+        BigInteger baseTo;
+        int baseFromInt;
+        int baseToInt;
+        String input;
+        String input2;
         do {
-            System.out.print(INPUT_TO_FROM);
-            fromToExit = scanner.nextLine();
-            if(fromToExit.equals(EXIT)) {
+            System.out.print(INPUT_TWO_BASES_STR);
+            input = scanner.nextLine();
+            if (input.equals(EXIT)) {
                 break;
-            } else if (fromToExit.equals(TO)) {
-                System.out.print(INPUT_TO_STR);
-                numberString = scanner.nextLine();
-                System.out.print(INPUT_SOURCE_BASE_STR);
-                base = scanner.nextInt();
-                new ConvertToDecimal(numberString, base);
-            } else if (fromToExit.equals(FROM)) {
-                System.out.print(INPUT_FROM_STR);
-                number = scanner.nextInt();
-                System.out.print(INPUT_TARGET_BASE_STR);
-                base = scanner.nextInt();
-                new ConvertFromDecimal(number, base);
+            } else {
+                String[] basesString = input.trim().split("\\s+");
+                baseFromInt = Integer.parseInt(basesString[0]);
+                baseToInt = Integer.parseInt(basesString[1]);
+                do {
+                    System.out.printf(INPUT_ENTER_STR, baseFromInt, baseToInt);
+                    input2 = scanner.nextLine();
+                    if (input2.equals(BACK)) {
+                        break;
+                    } else {
+                        ConvertToDecimal convertTo = new ConvertToDecimal(input2, baseFromInt);
+                        number = convertTo.getResult();
+                        baseTo = BigInteger.valueOf(baseToInt);
+                        ConvertFromDecimal convertFrom = new ConvertFromDecimal(number, baseTo);
+                        System.out.println(CONVERSION + convertFrom.getResult());
+                    }
+                } while (true);
             }
         } while (true);
     }

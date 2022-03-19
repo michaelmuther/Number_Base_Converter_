@@ -1,21 +1,48 @@
+import java.math.BigInteger;
+
 public class ConvertFromDecimal {
 
-    private int decimal;
-    private int base;
+    private BigInteger decimal;
+    private BigInteger base;
     private String result = "";
 
-    public ConvertFromDecimal(int decimal, int base) {
+    public ConvertFromDecimal(BigInteger decimal, BigInteger base) {
         this.decimal = decimal;
         this.base = base;
-        result = Integer.toString(decimal, base); // this Integer built-in function will handle all requirements. Is there an opposite?
-        printResult();
+        decimalToBase();
     }
 
-    private void printResult() {
-        final String OUTPUT_FROM = "Conversion result: ";
-        System.out.println(OUTPUT_FROM + result + "\n");
+    private void decimalToBase() {
+        BigInteger quotient = decimal;
+        StringBuilder tempResult = new StringBuilder();
+        do {
+            BigInteger remainder = bigIntRemainder(quotient,base);
+            if (remainder.compareTo(BigInteger.TEN) >= 0) {
+                char temp = (char) (87 + remainder.intValue());
+                tempResult.append(temp);
+            } else {
+                tempResult.append(remainder);
+            }
+            quotient = quotient.divide(base);
+        } while (quotient.compareTo(BigInteger.ZERO) > 0);
+        result = tempResult.reverse().toString();
+    }
+
+    private BigInteger bigIntRemainder(BigInteger input, BigInteger base) {
+        BigInteger temp = input.divide(base);
+        temp = input.subtract(temp.multiply(base));
+        return temp;
+    }
+
+    public String getResult() {
+        return result;
     }
 }
+
+//    private void printResult() {
+//        final String OUTPUT_FROM = "Conversion result: ";
+//        System.out.println(OUTPUT_FROM + result + "\n");
+//    }
 
 //    private void converter() {
 //        switch (base) {
@@ -27,19 +54,9 @@ public class ConvertFromDecimal {
 //                break;
 //        }
 //    }
-//
-//    private void decimalToBaseTwo() {
-//        int quotient = decimal;
-//        StringBuilder tempResult = new StringBuilder();
-//        do {
-//            tempResult.append(quotient % 2);
-//            quotient = quotient / 2;
-//        } while (quotient > 0);
-//        result = tempResult.reverse().toString();
-//    }
-//
+
 //    private void decimalToBaseEight() {
-//        int quotient = decimal;
+//        BigInteger quotient = decimal;
 //        StringBuilder tempResult = new StringBuilder();
 //        do {
 //            tempResult.append(quotient % 8);
@@ -49,7 +66,7 @@ public class ConvertFromDecimal {
 //    }
 //
 //    private void decimalToBaseSixteen() {
-//        int quotient = decimal;
+//        BigInteger quotient = decimal;
 //        StringBuilder tempResult = new StringBuilder();
 //        do {
 //            int remainder = quotient % 16;
